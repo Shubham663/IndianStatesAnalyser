@@ -21,23 +21,27 @@ import org.apache.logging.log4j.LogManager;
  *
  */
 public class StateCensusAnalyser {
-	public static int readStatesCensusFromCsv(String fileName){
+	public static int readStatesCensusFromCsv(String fileName) throws CustomException{
 		Logger logger = LogManager.getLogger(StateCensusAnalyser.class);
+		int val = 0,count;
 		Reader reader = null;
 		try {
 			reader = Files.newBufferedReader(Paths.get(fileName));
+			CsvToBean<States> csvToBean = new CsvToBeanBuilder<States>(reader).withType(States.class).withIgnoreLeadingWhiteSpace(true).build();
+			
+			Iterator<States> iterator = csvToBean.iterator();
+			count = 1;
+			while(iterator.hasNext()) {
+				States states = iterator.next();
+				logger.info(states + " got from " + (count++) + " object");
+			}
+			val = count-1;
 		} catch (IOException e) {
 			logger.error("Unable to open the mentioned file " + fileName);
-			return 0;
+			throw new CustomException("Unable to open the mentioned file " + fileName);
 		}
-		CsvToBean<States> csvToBean = new CsvToBeanBuilder<States>(reader).withType(States.class).withIgnoreLeadingWhiteSpace(true).build();
-		
-		Iterator<States> iterator = csvToBean.iterator();
-		int count = 1;
-		while(iterator.hasNext()) {
-			States states = iterator.next();
-			logger.info(states + " got from " + (count++) + " object");
+		finally {
+			return val;
 		}
-		return (count-1);
 	}
 }

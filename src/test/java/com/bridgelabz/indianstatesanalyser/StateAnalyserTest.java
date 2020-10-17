@@ -14,12 +14,12 @@ public class StateAnalyserTest
      * Rigorous Test :-)
      */
     @Test
-    public void recordsCountTest_returnsFullRecords(){
+    public void recordsCountTest_returnsFullRecords() throws CustomException{
         assertEquals(29,StateCensusAnalyser.readStatesCensusFromCsv("IndiaStateCensusData - IndiaStateCensusData.csv") );
     }
     
     @Test
-    public void recordsCountTest_returnsZero() {
+    public void recordsCountTest_returnsZero() throws CustomException{
         assertEquals(0,StateCensusAnalyser.readStatesCensusFromCsv("IndiaStateCensusData - IndiaStateCensusData") );
     }
 }
