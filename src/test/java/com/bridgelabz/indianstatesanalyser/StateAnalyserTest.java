@@ -19,7 +19,7 @@ public class StateAnalyserTest
     }
     
     @Test
-    public void typeNotProvidedTest_doesNotReturnAllRecords() throws IOException {
-    	assertNotEquals(37,CSVStates.readStatesCensusFromCsv("IndiaStateCode - IndiaStateCode.csv") );
+    public void delimiterIncorrectTest_doesNotReturnAllRecords() throws IOException {
+    	assertNotEquals(37,CSVStates.readStatesCensusFromCsv("IndiaStateCode - IndiaStateCode_3.csv") );
     }
 }
