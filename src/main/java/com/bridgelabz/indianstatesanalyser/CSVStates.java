@@ -16,23 +16,27 @@ import com.opencsv.bean.CsvToBeanBuilder;
  * @author Shubham, parses the states code csv file for operations
  */
 public class CSVStates {
-	public static int readStatesCensusFromCsv(String fileName){
+	public static int readStatesCensusFromCsv(String fileName) throws IOException{
 		Logger logger = LogManager.getLogger(CSVStates.class);
+		int count = 1 , val;
 		Reader reader = null;
-		try {
-			reader = Files.newBufferedReader(Paths.get(fileName));
-		} catch (IOException e) {
-			logger.error("Unable to open the mentioned file " + fileName);
-			return 0;
-		}
-		CsvToBean<StateCodes> csvToBean = new CsvToBeanBuilder<StateCodes>(reader).withType(StateCodes.class).withIgnoreLeadingWhiteSpace(true).build();
-
+		reader = Files.newBufferedReader(Paths.get(fileName));
+		CsvToBean<StateCodes> csvToBean = new CsvToBeanBuilder<StateCodes>(reader).withType(StateCodes.class)
+				.withIgnoreLeadingWhiteSpace(true).withThrowExceptions(false).build();
 		Iterator<StateCodes> iterator = csvToBean.iterator();
-		int count = 1;
-		while(iterator.hasNext()) {
+		while (iterator.hasNext()) {
 			StateCodes states = iterator.next();
 			logger.info(states + " got from " + (count++) + " object");
 		}
-		return (count-1);
+		val = count - 1;
+		csvToBean.getCapturedExceptions().stream().forEach(t-> {
+			try{
+				throw new CustomException(t.toString());
+			}catch(CustomException exception) {
+				logger.error(exception.getMessage());
+			}
+			});
+
+		return val;
 	}
 }

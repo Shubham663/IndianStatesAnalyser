@@ -19,7 +19,7 @@ public class StateAnalyserTest
     }
     
     @Test
-    public void recordsCountStateCodesTest_returnsAllRecords() {
-    	assertEquals(37,CSVStates.readStatesCensusFromCsv("IndiaStateCode - IndiaStateCode.csv") );
+    public void recordsCountStateCodesTest_doesNotReturnAllRecords() throws IOException {
+    	assertNotEquals(37,CSVStates.readStatesCensusFromCsv("IndiaStateCode - IndiaStateCode_2.csv") );
     }
 }

@@ -1,9 +1,15 @@
 package com.bridgelabz.indianstatesanalyser;
 
+import com.opencsv.bean.CsvBindByName;
+
 public class StateCodes {
+	@CsvBindByName(column = "SrNo", required = true)
 	private int serialNo;
+	@CsvBindByName(column = "State Name", required = true)
 	private String name;
+	@CsvBindByName(column = "TIN", required = true)
 	private int tin;
+	@CsvBindByName(column = "StateCode", required = true)
 	private String stateCode;
 
 	/**
