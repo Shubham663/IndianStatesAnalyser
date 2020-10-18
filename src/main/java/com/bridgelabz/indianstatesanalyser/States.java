@@ -3,13 +3,13 @@ package com.bridgelabz.indianstatesanalyser;
 import com.opencsv.bean.CsvBindByName;
 
 public class States {
-	@CsvBindByName(column = "State")
+	@CsvBindByName(column = "State", required = true)
 	private String name;
-	@CsvBindByName(column = "Population")
+	@CsvBindByName(column = "Population", required = true)
 	private int population;
-	@CsvBindByName(column = "AreaInSqKm")
+	@CsvBindByName(column = "AreaInSqKm", required = true)
 	private double areaInSquareKm;
-	@CsvBindByName(column = "DensityPerSqKm")
+	@CsvBindByName(column = "DensityPerSqKm", required = true)
 	private double densityPerSquareKm;
 
 	/**
