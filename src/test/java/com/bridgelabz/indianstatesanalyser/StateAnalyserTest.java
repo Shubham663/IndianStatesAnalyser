@@ -17,4 +17,9 @@ public class StateAnalyserTest
     public void recordsCountTest_returnsFullRecords() throws CustomException, IOException{
         assertNotEquals(29,StateCensusAnalyser.readStatesCensusFromCsv("IndiaStateCensusData - IndiaStateCensusData_4.csv") );
     }
+    
+    @Test
+    public void recordsCountStateCodesTest_returnsAllRecords() {
+    	assertEquals(37,CSVStates.readStatesCensusFromCsv("IndiaStateCode - IndiaStateCode.csv") );
+    }
 }
