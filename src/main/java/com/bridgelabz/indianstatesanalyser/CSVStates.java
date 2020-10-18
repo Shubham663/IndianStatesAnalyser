@@ -20,24 +20,22 @@ public class CSVStates {
 		Logger logger = LogManager.getLogger(CSVStates.class);
 		int count = 1, val = 0;
 		Reader reader = null;
-		try {
-			count = 1;
-			reader = Files.newBufferedReader(Paths.get(fileName));
-			CsvToBean<StateCodes> csvToBean = new CsvToBeanBuilder<StateCodes>(reader).withIgnoreLeadingWhiteSpace(true)
-					.build();
-			Iterator<StateCodes> iterator = csvToBean.iterator();
-			while (iterator.hasNext()) {
-				StateCodes states = iterator.next();
-				logger.info(states + " got from " + (count++) + " object");
-				val = count - 1;
-			}
-		} catch (IllegalStateException exception) {
-			logger.error(exception.getMessage());
-			throw new CustomException(exception.getMessage());
-		} catch (Exception exception) {
-			System.out.println("error general");
-		} finally {
-			return val;
+		reader = Files.newBufferedReader(Paths.get(fileName));
+		CsvToBean<StateCodes> csvToBean = new CsvToBeanBuilder<StateCodes>(reader).withType(StateCodes.class)
+				.withThrowExceptions(false).withIgnoreLeadingWhiteSpace(true).build();
+		Iterator<StateCodes> iterator = csvToBean.iterator();
+		while (iterator.hasNext()) {
+			StateCodes states = iterator.next();
+			logger.info(states + " got from " + (count++) + " object");
+			val = count - 1;
 		}
+		csvToBean.getCapturedExceptions().stream().forEach(exception -> {
+			try {
+				throw new CustomException(exception.getMessage());
+			} catch (CustomException customException) {
+				logger.error("The delimiter is incorrect and therefor " + customException.getMessage());
+			}
+		});
+		return val;
 	}
 }
