@@ -20,29 +20,38 @@ import com.opencsv.bean.CsvToBeanBuilder;
 public class StateCensusAnalyser {
 	public static int readStatesCensusFromCsv(String fileName) throws IOException, CustomException {
 		Logger logger = LogManager.getLogger(StateCensusAnalyser.class);
-		int val = 0, count = 1;
+		int val = 0, count = 0;
 		Reader reader = null;
-		reader = Files.newBufferedReader(Paths.get(fileName));
-		CsvToBean<States> csvToBean = new CsvToBeanBuilder<States>(reader).withType(States.class)
-				.withIgnoreLeadingWhiteSpace(true).withThrowExceptions(false).build();
-		Iterator<States> iterator = csvToBean.iterator();
-		while (iterator.hasNext()) {
-			States states = iterator.next();
-			if (states.getName() == null || states.getAreaInSquareKm() == 0 || states.getDensityPerSquareKm() == 0
-					|| states.getPopulation() == 0)
-				throw new CustomException("The csv file does not contain the data correctly.");
-			logger.info(states + " got from " + (count++) + " object");
-		}
-		val = count - 1;
-		csvToBean.getCapturedExceptions().stream().forEach(t-> {
-			try{
-				throw new CustomException(t.toString());
-			}catch(CustomException exception) {
-				logger.error(exception.getMessage());
+		try {
+			count = 1;
+			reader = Files.newBufferedReader(Paths.get(fileName));
+			CsvToBean<States> csvToBean = new CsvToBeanBuilder<States>(reader).withIgnoreLeadingWhiteSpace(true)
+					.build();
+			Iterator<States> iterator = csvToBean.iterator();
+			while (iterator.hasNext()) {
+				States states = iterator.next();
+				if (states.getName() == null || states.getAreaInSquareKm() == 0 || states.getDensityPerSquareKm() == 0
+						|| states.getPopulation() == 0)
+					throw new CustomException("The csv file does not contain the data correctly.");
+				logger.info(states + " got from " + (count++) + " object");
+				val = count - 1;
 			}
-			});
-		
-		return val;
+		} catch (IllegalStateException exception) {
+			logger.error(exception.getMessage());
+			throw new CustomException(exception.getMessage());
+		} catch(Exception exception){
+			System.out.println("error general");
+		}finally {
+			return val;
+		}
+//		csvToBean.getCapturedExceptions().stream().forEach(t-> {
+//			try{
+//				throw new CustomException(t.toString());
+//			}catch(CustomException exception) {
+//				logger.error(exception.getMessage());
+//			}
+//			});
+//		
 	}
-	
+
 }
