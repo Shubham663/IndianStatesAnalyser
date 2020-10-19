@@ -2,7 +2,6 @@ package com.bridgelabz.indianstatesanalyser;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
@@ -44,7 +43,8 @@ public class StateAnalyserTest {
 
 	@Test
 	public void recordsCountStateCodeTest_returnsFullRecords() throws CustomException, IOException {
-		assertEquals(37, StateCensusAnalyser.readStatesCensusFromCsv("IndiaStateCode - IndiaStateCode.csv", StateCodes.class));
+		assertEquals(37,
+				StateCensusAnalyser.readStatesCensusFromCsv("IndiaStateCode - IndiaStateCode.csv", StateCodes.class));
 	}
 
 	@Test
@@ -55,7 +55,8 @@ public class StateAnalyserTest {
 
 	@Test
 	public void invalidClassTypeStateCodeTest_doesNotReadAllRecords() throws CustomException, IOException {
-		assertNotEquals(37, StateCensusAnalyser.readStatesCensusFromCsv("IndiaStateCode - IndiaStateCode.csv", CSVStates.class));
+		assertNotEquals(37,
+				StateCensusAnalyser.readStatesCensusFromCsv("IndiaStateCode - IndiaStateCode.csv", CSVStates.class));
 	}
 
 	@Test
