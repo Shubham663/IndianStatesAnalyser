@@ -3,13 +3,13 @@ package com.bridgelabz.indianstatesanalyser;
 import com.opencsv.bean.CsvBindByName;
 
 public class StateCodes {
-	@CsvBindByName(column = "SrNo", required = true)
+	@CsvBindByName(column = "SrNo")
 	private int serialNo;
-	@CsvBindByName(column = "State Name", required = true)
+	@CsvBindByName(column = "State Name")
 	private String name;
-	@CsvBindByName(column = "TIN", required = true)
+	@CsvBindByName(column = "TIN")
 	private int tin;
-	@CsvBindByName(column = "StateCode", required = true)
+	@CsvBindByName(column = "StateCode")
 	private String stateCode;
 
 	/**

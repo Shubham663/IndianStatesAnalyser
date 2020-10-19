@@ -10,6 +10,6 @@ public class Main
 {
     public static void main ( String[] args ) throws CustomException, IOException{
         System.out.println( "Hello World!" );
-        StateCensusAnalyser.readStatesCensusFromCsv("IndiaStateCensusData - IndiaStateCensusData.csv");
+        StateCensusAnalyser.readStatesCensusFromCsv("IndiaStateCensusData - IndiaStateCensusData.csv",States.class);
     }
 }
