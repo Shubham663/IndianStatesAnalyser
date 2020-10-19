@@ -15,13 +15,14 @@ import com.opencsv.CSVWriter;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.exceptions.CsvException;
+import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 
 /**
  * @author Shubham, class for analysing indian states.
  *
  */
 public class StateCensusAnalyser {
-	public static int readStatesCensusFromCsv(String fileName, Class whichClass) throws IOException, CustomException {
+	public static <T>int readStatesCensusFromCsv(String fileName, T whichClass) throws IOException, CustomException {
 		Logger logger = LogManager.getLogger(StateCensusAnalyser.class);
 		int val = 0, count = 0;
 		Reader reader = null;
@@ -32,25 +33,25 @@ public class StateCensusAnalyser {
 			BufferedReader bufferedReader = new BufferedReader(reader);
 			if ((line = bufferedReader.readLine()) != null) {
 				String[] headers = line.split(",");
-				if (headers.length != 4 || !headers[0].equals("State") || !headers[1].equals("Population")
-						|| !headers[2].equals("AreaInSqKm") || !headers[3].equals("DensityPerSqKm")) {
+				if ((whichClass.equals(StateCensusAnalyser.class) &&  (   headers.length != 4 || !headers[0].equals("State") || !headers[1].equals("Population")
+						|| !headers[2].equals("AreaInSqKm") || !headers[3].equals("DensityPerSqKm"))) ||
+					(whichClass.equals(StateCodes.class) &&  (!headers[0].equals("SrNo") || !headers[1].equals("State Name")
+							|| !headers[2].equals("TIN") || !headers[3].equals("StateCode")	)) ){
 					throw new CustomException("The headers are not correct for the CSV file");
 				}
 			}
 			reader = Files.newBufferedReader(Paths.get(fileName));
-			if (!whichClass.equals(States.class)) {
+			if (!whichClass.equals(States.class) && !whichClass.equals(StateCodes.class)) {
 				throw new CustomException("The type of class specified is not correct");
 			}
-			CsvToBean<States> csvToBean = new CsvToBeanBuilder(reader).withType((Class) whichClass)
+			CsvToBean<T> csvToBean = new CsvToBeanBuilder(reader).withType((Class) whichClass)
 					.withQuoteChar(CSVWriter.NO_QUOTE_CHARACTER).withThrowExceptions(false).build();
-			Iterator<States> iterator = csvToBean.iterator();
+			Iterator<T> iterator = csvToBean.iterator();
 			while (iterator.hasNext()) {
 				count++;
-				States state = iterator.next();
-				if (state.getName() == null || state.getDensityPerSquareKm() == 0 || state.getAreaInSquareKm() == 0
-						|| state.getPopulation() == 0) {
+				if ((line = bufferedReader.readLine()) != null && (!line.contains(",") || line.split(",").length != 4) )
 					throw new CustomException("Correct delimeters are not present");
-				}
+				T state = iterator.next();
 				logger.info(state.toString());
 			}
 			val = count - 1;
@@ -58,12 +59,10 @@ public class StateCensusAnalyser {
 				if (csvException.getCause() instanceof ConversionException) {
 					throw new CustomException("Invalid data present inside CSV file, " + csvException.getMessage());
 				}
-				;
-				throw new CustomException(csvException.getMessage());
 			}
 		} catch (CustomException customException) {
 			logger.error(customException.getMessage());
-		} finally {
+		}finally {
 			return val;
 		}
 	}
