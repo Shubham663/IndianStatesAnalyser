@@ -27,7 +27,7 @@ public class StateAnalyserTest {
 	@Test
 	public void invalidClassTypeTest_doesNotReadAllRecords() throws CustomException, IOException {
 		assertNotEquals(29, StateCensusAnalyser
-				.readStatesCensusFromCsv("IndiaStateCensusData - IndiaStateCensusData.csv", StateCodes.class));
+				.readStatesCensusFromCsv("IndiaStateCensusData - IndiaStateCensusData.csv", CSVStates.class));
 	}
 
 	@Test
@@ -44,29 +44,29 @@ public class StateAnalyserTest {
 
 	@Test
 	public void recordsCountStateCodeTest_returnsFullRecords() throws CustomException, IOException {
-		assertEquals(37, CSVStates.readStatesCensusFromCsv("IndiaStateCode - IndiaStateCode.csv", StateCodes.class));
+		assertEquals(37, StateCensusAnalyser.readStatesCensusFromCsv("IndiaStateCode - IndiaStateCode.csv", StateCodes.class));
 	}
 
 	@Test
 	public void invalidRecordsStateCodeTest_doesNotReadAllRecords() throws CustomException, IOException {
 		assertNotEquals(37,
-				CSVStates.readStatesCensusFromCsv("IndiaStateCode - IndiaStateCode_2.csv", StateCodes.class));
+				StateCensusAnalyser.readStatesCensusFromCsv("IndiaStateCode - IndiaStateCode_2.csv", StateCodes.class));
 	}
 
 	@Test
 	public void invalidClassTypeStateCodeTest_doesNotReadAllRecords() throws CustomException, IOException {
-		assertNotEquals(37, CSVStates.readStatesCensusFromCsv("IndiaStateCode - IndiaStateCode.csv", States.class));
+		assertNotEquals(37, StateCensusAnalyser.readStatesCensusFromCsv("IndiaStateCode - IndiaStateCode.csv", CSVStates.class));
 	}
 
 	@Test
 	public void incorrectDelimetersStateCodeTest_doesNotReadAllRecords() throws CustomException, IOException {
 		assertNotEquals(37,
-				CSVStates.readStatesCensusFromCsv("IndiaStateCode - IndiaStateCode_3.csv", StateCodes.class));
+				StateCensusAnalyser.readStatesCensusFromCsv("IndiaStateCode - IndiaStateCode_3.csv", StateCodes.class));
 	}
 
 	@Test
 	public void incorrectHeadersStateCodeTest_doesNotReadAllRecords() throws CustomException, IOException {
 		assertNotEquals(37,
-				CSVStates.readStatesCensusFromCsv("IndiaStateCode - IndiaStateCode_4.csv", StateCodes.class));
+				StateCensusAnalyser.readStatesCensusFromCsv("IndiaStateCode - IndiaStateCode_4.csv", StateCodes.class));
 	}
 }
