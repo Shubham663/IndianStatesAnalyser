@@ -75,7 +75,10 @@ public class StateCensusAnalyser {
 	}
 
 	private static<T> List<T> sort(List<T> list,T whichClass) {
-		Collections.sort(list,new CompareStateName());
+		if(whichClass.equals(States.class))
+			Collections.sort(list,new CompareStateName());
+		else if(whichClass.equals(StateCodes.class))
+			Collections.sort(list,new CompareStateCode());
 		return list;
 	}
 }
