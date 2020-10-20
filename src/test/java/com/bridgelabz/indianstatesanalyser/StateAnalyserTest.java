@@ -76,7 +76,7 @@ public class StateAnalyserTest {
 	
 	@Test
 	public void correctSortedOrderTest_SortsAllRecords() throws IOException, com.bridgelabz.csvreader.CustomException {
-		String []vals = StateCensusAnalyser.readStatesCensusFromCsvAsJson("IndiaStateCensusData - IndiaStateCensusData.csv", States.class)
+		String []vals = StateCensusAnalyser.readStatesCensusFromCsvAsJson("IndiaStateCensusData - IndiaStateCensusData.csv", States.class,"State Name")
 				.split(",");
 		assertTrue( vals[0].split(":")[1].equals("\"Andhra Pradesh\"") );
 		assertTrue( vals[vals.length - 4].split(":")[1].equals("\"West Bengal\"") );
@@ -84,9 +84,17 @@ public class StateAnalyserTest {
 	
 	@Test
 	public void correctSortedOrderStateCodesTest_SortsAllRecords() throws IOException, com.bridgelabz.csvreader.CustomException {
-		String []vals = StateCensusAnalyser.readStatesCensusFromCsvAsJson("IndiaStateCode - IndiaStateCode.csv", StateCodes.class)
+		String []vals = StateCensusAnalyser.readStatesCensusFromCsvAsJson("IndiaStateCode - IndiaStateCode.csv", StateCodes.class,"StateCode")
 				.split(",");
 		assertTrue( vals[1].split(":")[1].equals("\"Andhra Pradesh New\"") );
 		assertTrue( vals[vals.length - 3].split(":")[1].equals("\"West Bengal\"") );
+	}
+	
+	@Test
+	public void correctSortedOrderForPopulationTest_SortsAllRecords() throws IOException, com.bridgelabz.csvreader.CustomException {
+		String []vals = StateCensusAnalyser.readStatesCensusFromCsvAsJson("IndiaStateCensusData - IndiaStateCensusData.csv", States.class,"Population")
+				.split(",");
+		assertTrue( vals[0].split(":")[1].equals("\"Uttar Pradesh\"") );
+		assertTrue( vals[vals.length - 4].split(":")[1].equals("\"Sikkim\"") );
 	}
 }

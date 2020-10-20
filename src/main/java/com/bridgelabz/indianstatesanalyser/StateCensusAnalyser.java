@@ -46,7 +46,7 @@ public class StateCensusAnalyser {
 		}
 	}
 	
-	public static <T> String readStatesCensusFromCsvAsJson(String fileName, T whichClass)
+	public static <T> String readStatesCensusFromCsvAsJson(String fileName, T whichClass,String field)
 			throws IOException, com.bridgelabz.csvreader.CustomException {
 		Logger logger = LogManager.getLogger(StateCensusAnalyser.class);
 		List<T> listOfObjects = new ArrayList<T>();
@@ -57,7 +57,7 @@ public class StateCensusAnalyser {
 			String line = null;
 			ICSVBuilder csvBuilder = CSVBuilderFactory.generateBuilder();
 			List<T> list = csvBuilder.getList(fileName, reader, whichClass);
-			list = sort(list,whichClass);
+			list = sort(list,whichClass,field);
 			json = gson.toJson(list);
 			reader = Files.newBufferedReader(Paths.get(fileName));
 			BufferedReader bufferedReader = new BufferedReader(reader);
@@ -74,9 +74,13 @@ public class StateCensusAnalyser {
 		}
 	}
 
-	private static<T> List<T> sort(List<T> list,T whichClass) {
-		if(whichClass.equals(States.class))
-			Collections.sort(list,new CompareStateName());
+	private static<T> List<T> sort(List<T> list,T whichClass,String field) {
+		if(whichClass.equals(States.class)) {
+			if(field.equals("State Name"))
+				Collections.sort(list,new CompareState.CompareStateName());
+			else if(field.equals("Population"))
+				Collections.sort(list,new CompareState.CompareStatePopulation());
+		}
 		else if(whichClass.equals(StateCodes.class))
 			Collections.sort(list,new CompareStateCode());
 		return list;
