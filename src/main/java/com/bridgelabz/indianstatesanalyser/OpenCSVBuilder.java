@@ -14,9 +14,9 @@ import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.exceptions.CsvException;
 
-public class CSVBuilder {
+public class OpenCSVBuilder implements ICSVBuilder{
 
-	public static <T> Iterator getIterator(String fileName, Reader reader, T whichClass)
+	public <T> Iterator getIterator(String fileName, Reader reader, T whichClass)
 			throws IOException, CustomException {
 		reader = Files.newBufferedReader(Paths.get(fileName));
 		BufferedReader bufferedReader = new BufferedReader(reader);
