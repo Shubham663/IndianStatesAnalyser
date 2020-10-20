@@ -7,6 +7,8 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import com.bridgelabz.csvreader.CustomException;
+
 /**
  * Unit test for StateAnalyser.
  */
@@ -26,7 +28,7 @@ public class StateAnalyserTest {
 	@Test
 	public void invalidClassTypeTest_doesNotReadAllRecords() throws CustomException, IOException {
 		assertNotEquals(29, StateCensusAnalyser
-				.readStatesCensusFromCsv("IndiaStateCensusData - IndiaStateCensusData.csv", CSVStates.class));
+				.readStatesCensusFromCsv("IndiaStateCensusData - IndiaStateCensusData.csv", StateCensusAnalyser.class));
 	}
 
 	@Test
@@ -56,7 +58,7 @@ public class StateAnalyserTest {
 	@Test
 	public void invalidClassTypeStateCodeTest_doesNotReadAllRecords() throws CustomException, IOException {
 		assertNotEquals(37,
-				StateCensusAnalyser.readStatesCensusFromCsv("IndiaStateCode - IndiaStateCode.csv", CSVStates.class));
+				StateCensusAnalyser.readStatesCensusFromCsv("IndiaStateCode - IndiaStateCode.csv", StateAnalyserTest.class));
 	}
 
 	@Test
