@@ -9,14 +9,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.beanutils.ConversionException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import com.opencsv.CSVWriter;
-import com.opencsv.bean.CsvToBean;
-import com.opencsv.bean.CsvToBeanBuilder;
-import com.opencsv.exceptions.CsvException;
 
 /**
  * @author Shubham, class for analysing indian states.
@@ -29,7 +23,8 @@ public class StateCensusAnalyser {
 		Reader reader = null;
 		try {
 			String line = null;
-			Iterator iterator = CSVBuilder.getIterator(fileName,reader,whichClass);
+			ICSVBuilder csvBuilder = CSVBuilderFactory.generateBuilder();
+			Iterator iterator = csvBuilder.getIterator(fileName,reader,whichClass);
 			reader = Files.newBufferedReader(Paths.get(fileName));
 			BufferedReader bufferedReader = new BufferedReader(reader);
 			while (iterator.hasNext()) {
