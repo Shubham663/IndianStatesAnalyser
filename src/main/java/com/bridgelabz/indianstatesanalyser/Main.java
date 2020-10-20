@@ -2,7 +2,7 @@ package com.bridgelabz.indianstatesanalyser;
 
 import java.io.IOException;
 
-import com.bridgelabz.csvreader.CustomException;
+import com.bridgelabz.commonscsvreader.CustomException;
 
 /**
  * Hello world!
