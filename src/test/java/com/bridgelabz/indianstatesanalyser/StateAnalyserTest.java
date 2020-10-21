@@ -97,4 +97,12 @@ public class StateAnalyserTest {
 		assertTrue( vals[0].split(":")[1].equals("\"Uttar Pradesh\"") );
 		assertTrue( vals[vals.length - 4].split(":")[1].equals("\"Sikkim\"") );
 	}
+	
+	@Test
+	public void correctSortedOrderForPopulationDensityTest_SortsAllRecords() throws IOException, com.bridgelabz.csvreader.CustomException {
+		String []vals = StateCensusAnalyser.readStatesCensusFromCsvAsJson("IndiaStateCensusData - IndiaStateCensusData.csv", States.class,"Population Density")
+				.split(",");
+		assertTrue( vals[0].split(":")[1].equals("\"Bihar\"") );
+		assertTrue( vals[vals.length - 4].split(":")[1].equals("\"Arunachal Pradesh\"") );
+	}
 }
