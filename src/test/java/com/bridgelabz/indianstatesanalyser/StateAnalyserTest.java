@@ -105,4 +105,12 @@ public class StateAnalyserTest {
 		assertTrue( vals[0].split(":")[1].equals("\"Bihar\"") );
 		assertTrue( vals[vals.length - 4].split(":")[1].equals("\"Arunachal Pradesh\"") );
 	}
+	
+	@Test
+	public void correctSortedOrderForStateAreaTest_SortsAllRecords() throws IOException, com.bridgelabz.csvreader.CustomException {
+		String []vals = StateCensusAnalyser.readStatesCensusFromCsvAsJson("IndiaStateCensusData - IndiaStateCensusData.csv", States.class,"State Area")
+				.split(",");
+		assertTrue( vals[0].split(":")[1].equals("\"Rajasthan\"") );
+		assertTrue( vals[vals.length - 4].split(":")[1].equals("\"Goa\"") );
+	}
 }
