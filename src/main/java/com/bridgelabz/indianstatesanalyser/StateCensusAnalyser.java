@@ -80,6 +80,9 @@ public class StateCensusAnalyser {
 				Collections.sort(list,new CompareState.CompareStateName());
 			else if(field.equals("Population"))
 				Collections.sort(list,new CompareState.CompareStatePopulation());
+			else if(field.equals("Population Density")) {
+				Collections.sort(list,new CompareState.CompareStatePopulationDensity());
+			}
 		}
 		else if(whichClass.equals(StateCodes.class))
 			Collections.sort(list,new CompareStateCode());
