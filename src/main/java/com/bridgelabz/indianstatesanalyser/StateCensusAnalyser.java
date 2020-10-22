@@ -46,19 +46,24 @@ public class StateCensusAnalyser {
 		}
 	}
 	
-	public static <T> String readStatesCensusFromCsvAsJson(String fileName, T whichClass,String field)
+	public static<T> T[] readStatesCensusFromCsvAsJson(String fileName, Class whichClass,String field)
 			throws IOException, com.bridgelabz.csvreader.CustomException {
 		Logger logger = LogManager.getLogger(StateCensusAnalyser.class);
 		List<T> listOfObjects = new ArrayList<T>();
 		Reader reader = null;
 		Gson gson = new Gson();
 		String json = null;
+		T []states = null;
 		try {
 			String line = null;
 			ICSVBuilder csvBuilder = CSVBuilderFactory.generateBuilder();
 			List<T> list = csvBuilder.getList(fileName, reader, whichClass);
 			list = sort(list,whichClass,field);
 			json = gson.toJson(list);
+			if(list.get(0) instanceof States)
+				states = (T[])gson.fromJson(json,States[].class);
+			else
+				states = (T[])gson.fromJson(json, StateCodes[].class);
 			reader = Files.newBufferedReader(Paths.get(fileName));
 			BufferedReader bufferedReader = new BufferedReader(reader);
 			for (T state : list) {
@@ -70,11 +75,11 @@ public class StateCensusAnalyser {
 		} catch (CustomException customException) {
 			logger.error(customException.getMessage());
 		} finally {
-			return json;
+			return states;
 		}
 	}
 
-	private static<T> List<T> sort(List<T> list,T whichClass,String field) {
+	private static<T> List<T> sort(List<T> list,Class whichClass,String field) {
 		if(whichClass.equals(States.class)) {
 			if(field.equals("State Name"))
 				Collections.sort(list,new CompareState.CompareStateName());
