@@ -22,30 +22,40 @@ import com.google.gson.Gson;
  *
  */
 public class StateCensusAnalyser {
-	public static <T> int readStatesCensusFromCsv(String fileName, T whichClass)
+	public static <T> int readStatesCensusFromCsv(String fileName, Class whichClass)
 			throws IOException, com.bridgelabz.csvreader.CustomException {
 		Logger logger = LogManager.getLogger(StateCensusAnalyser.class);
-		List<T> listOfObjects = new ArrayList<T>();
+		List<T> listOfObjects = null;
 		Reader reader = null;
 		try {
 			String line = null;
-			ICSVBuilder csvBuilder = CSVBuilderFactory.generateBuilder();
-			List<T> list = csvBuilder.getList(fileName, reader, whichClass);
-			reader = Files.newBufferedReader(Paths.get(fileName));
-			BufferedReader bufferedReader = new BufferedReader(reader);
-			for (T state : list) {
-				if (((line = bufferedReader.readLine()) != null) && line.split(",").length != 4)
-					throw new CustomException("Correct delimeters are not present");
-				listOfObjects.add(state);
-				logger.info(state.toString());
-			}
+			List<T> list = getList(fileName, reader, whichClass);
+			listOfObjects = checkForCorrectDelimeters(fileName,list);
 		} catch (CustomException customException) {
 			logger.error(customException.getMessage());
 		} finally {
-			return listOfObjects.size();
+			return listOfObjects == null ? 0 : listOfObjects.size();
 		}
 	}
 	
+	private static<T> List<T> checkForCorrectDelimeters(String fileName,List<T> list) throws IOException, CustomException {
+		Reader reader = Files.newBufferedReader(Paths.get(fileName));
+		BufferedReader bufferedReader = new BufferedReader(reader);
+		String line = null;
+		int count = 0;
+		List<T> listOfObjects = new ArrayList<>();
+		line = bufferedReader.readLine();
+		while ( (line = bufferedReader.readLine()) != null ) {
+			if (line.split(",").length != 4) {
+				throw new CustomException("Correct delimeters are not present");
+			}
+			T state = list.get(count);
+			count++;
+			listOfObjects.add(state);
+		}
+		return listOfObjects;
+	}
+
 	public static<T> T[] readStatesCensusFromCsvAsJson(String fileName, Class whichClass,String field)
 			throws IOException, com.bridgelabz.csvreader.CustomException {
 		Logger logger = LogManager.getLogger(StateCensusAnalyser.class);
@@ -56,27 +66,25 @@ public class StateCensusAnalyser {
 		T []states = null;
 		try {
 			String line = null;
-			ICSVBuilder csvBuilder = CSVBuilderFactory.generateBuilder();
-			List<T> list = csvBuilder.getList(fileName, reader, whichClass);
+			List<T> list = getList(fileName, reader, whichClass);
 			list = sort(list,whichClass,field);
 			json = gson.toJson(list);
 			if(list.get(0) instanceof States)
 				states = (T[])gson.fromJson(json,States[].class);
 			else
 				states = (T[])gson.fromJson(json, StateCodes[].class);
-			reader = Files.newBufferedReader(Paths.get(fileName));
-			BufferedReader bufferedReader = new BufferedReader(reader);
-			for (T state : list) {
-				if (((line = bufferedReader.readLine()) != null) && line.split(",").length != 4)
-					throw new CustomException("Correct delimeters are not present");
-				listOfObjects.add(state);
-				logger.info(state.toString());
-			}
+			listOfObjects = checkForCorrectDelimeters(fileName,list);
 		} catch (CustomException customException) {
 			logger.error(customException.getMessage());
 		} finally {
 			return states;
 		}
+	}
+
+	private static<T> List<T> getList(String fileName, Reader reader, Class whichClass) throws IOException, CustomException {
+		ICSVBuilder csvBuilder = CSVBuilderFactory.generateBuilder();
+		List<T> list = csvBuilder.getList(fileName, reader, whichClass);
+		return list;
 	}
 
 	private static<T> List<T> sort(List<T> list,Class whichClass,String field) {
